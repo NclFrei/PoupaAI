@@ -1,4 +1,4 @@
-package br.com.nicollasFrei.poupaAI.infrastructure.excepetions;
+package br.com.nicollasFrei.poupaAI.infrastructure.exceptions;
 
 public class ConflictException extends RuntimeException{
     public ConflictException (String mensagem) {

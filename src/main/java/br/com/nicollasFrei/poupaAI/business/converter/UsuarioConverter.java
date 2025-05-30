@@ -2,7 +2,9 @@ package br.com.nicollasFrei.poupaAI.business.converter;
 
 import br.com.nicollasFrei.poupaAI.business.dto.UsuarioDTO;
 import br.com.nicollasFrei.poupaAI.infrastructure.entity.Usuario;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UsuarioConverter {
 
     public Usuario paraUsuario(UsuarioDTO usuarioDTO){

@@ -2,9 +2,11 @@ package br.com.nicollasFrei.poupaAI.infrastructure.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.Collection;
 import java.util.List;

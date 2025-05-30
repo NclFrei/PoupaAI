@@ -39,6 +39,3 @@ out/
 # VS Code
 .vscode/
 
-# Arquivos sensíveis
-.env
-src/main/resources/application.properties
