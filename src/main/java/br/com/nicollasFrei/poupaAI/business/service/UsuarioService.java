@@ -5,6 +5,7 @@ import br.com.nicollasFrei.poupaAI.business.converter.UsuarioConverter;
 import br.com.nicollasFrei.poupaAI.business.dto.UsuarioDTO;
 import br.com.nicollasFrei.poupaAI.infrastructure.entity.Usuario;
 import br.com.nicollasFrei.poupaAI.infrastructure.exceptions.ConflictException;
+import br.com.nicollasFrei.poupaAI.infrastructure.exceptions.ResourceNotFoundException;
 import br.com.nicollasFrei.poupaAI.infrastructure.repository.UsuarioRepository;
 import br.com.nicollasFrei.poupaAI.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,20 @@ public class UsuarioService {
 
     public boolean verificaEmailExistente(String email) {
         return usuarioRepository.existsByEmail(email);
+    }
+
+    public UsuarioDTO buscarUsuarioPorEmail(String email) {
+        try{
+            return usuarioConverter.paraUsuarioDTO(
+                    usuarioRepository.findByEmail(email)
+                            .orElseThrow(
+                                    () -> new ResourceNotFoundException("Email não encontrado" + email)
+                            )
+            );
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException("Email não encotrado" + email);
+        }
+
     }
 
 }
