@@ -35,7 +35,7 @@ public class UsuarioService {
             if (existe) {
                 throw new ConflictException("Email já cadastrado" + email);
             }
-        } catch(ConflictException e) {
+        } catch (ConflictException e) {
             throw new ConflictException("Email já cadastrado", e.getCause());
         }
     }
@@ -49,13 +49,12 @@ public class UsuarioService {
             return usuarioConverter.paraUsuarioDTO(
                     usuarioRepository.findByEmail(email)
                             .orElseThrow(
-                                    () -> new ResourceNotFoundException("Email não encontrado" + email)
+                                    () -> new ResourceNotFoundException("Email não encontrado " + email)
                             )
             );
         } catch (ResourceNotFoundException e) {
-            throw new ResourceNotFoundException("Email não encotrado" + email);
+            throw new ResourceNotFoundException("Email não encotrado " + email);
         }
-
     }
 
 }
