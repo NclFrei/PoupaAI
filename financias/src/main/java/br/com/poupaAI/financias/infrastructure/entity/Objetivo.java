@@ -48,5 +48,7 @@ public class Objetivo {
     @OneToMany(mappedBy = "objetivo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transacao> transacoes;
 
+    private String emailUsuario;
+
 
 }
