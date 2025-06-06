@@ -2,6 +2,7 @@ package br.com.nicollasFrei.poupaAI.controller;
 
 
 import br.com.nicollasFrei.poupaAI.business.dto.UsuarioDTO;
+import br.com.nicollasFrei.poupaAI.business.dto.UsuarioPatchDTO;
 import br.com.nicollasFrei.poupaAI.business.service.UsuarioService;
 import br.com.nicollasFrei.poupaAI.infrastructure.security.JwtUtil;
 import jakarta.validation.Valid;
@@ -44,6 +45,22 @@ public class UsuarioController {
         UsuarioDTO dto = usuarioService.buscarUsuarioPorEmail(email);
         return ResponseEntity.ok(dto);
     }
+
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> deletarUsuarioPorEmail(@PathVariable String email) {
+        usuarioService.deletarUsuarioPorEmail(email);
+        return ResponseEntity.noContent().build(); // HTTP 204
+    }
+
+    @PatchMapping
+    public ResponseEntity<UsuarioDTO> atualizaDadosUsuario(
+            @RequestBody UsuarioPatchDTO dto,
+            @RequestHeader("Authorization") String token
+    ) {
+        UsuarioDTO atualizado = usuarioService.atualizaDadosUsuario(token, dto);
+        return ResponseEntity.ok(atualizado);
+    }
+
 
 
 

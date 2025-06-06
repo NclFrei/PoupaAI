@@ -3,12 +3,14 @@ package br.com.nicollasFrei.poupaAI.business.service;
 
 import br.com.nicollasFrei.poupaAI.business.converter.UsuarioConverter;
 import br.com.nicollasFrei.poupaAI.business.dto.UsuarioDTO;
+import br.com.nicollasFrei.poupaAI.business.dto.UsuarioPatchDTO;
 import br.com.nicollasFrei.poupaAI.infrastructure.entity.Usuario;
 import br.com.nicollasFrei.poupaAI.infrastructure.exceptions.ConflictException;
 import br.com.nicollasFrei.poupaAI.infrastructure.exceptions.ResourceNotFoundException;
 import br.com.nicollasFrei.poupaAI.infrastructure.repository.UsuarioRepository;
 import br.com.nicollasFrei.poupaAI.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +57,32 @@ public class UsuarioService {
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException("Email não encotrado " + email);
         }
+    }
+
+    public void deletarUsuarioPorEmail(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Email não encontrado: " + email)
+                );
+        try {
+            usuarioRepository.delete(usuario);
+        } catch (DataIntegrityViolationException ex) {
+            throw ex;
+        }
+    }
+
+    public UsuarioDTO atualizaDadosUsuario(String token, UsuarioPatchDTO dto) {
+        String email = jwtUtil.extrairEmailToken(token.substring(7));
+
+        Usuario usuarioOriginal  = usuarioRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Email não encontrado: " + email)
+                );
+
+        Usuario usuarioAtualizado  = usuarioConverter.updateUsuario(dto, usuarioOriginal );
+
+        Usuario salvo = usuarioRepository.save(usuarioAtualizado);
+        return usuarioConverter.paraUsuarioDTO(salvo);
     }
 
 }

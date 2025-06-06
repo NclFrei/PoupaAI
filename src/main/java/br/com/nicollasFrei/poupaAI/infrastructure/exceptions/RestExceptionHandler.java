@@ -1,5 +1,6 @@
 package br.com.nicollasFrei.poupaAI.infrastructure.exceptions;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -66,6 +67,15 @@ public class RestExceptionHandler {
                 "E-mail ou senha inválidos."
         );
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<RestErrorMessage> handleDataIntegrity(DataIntegrityViolationException ex) {
+        RestErrorMessage body = new RestErrorMessage(
+                HttpStatus.CONFLICT,
+                "Não foi possível excluir o usuário devido a vínculos no banco."
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
 
 }
