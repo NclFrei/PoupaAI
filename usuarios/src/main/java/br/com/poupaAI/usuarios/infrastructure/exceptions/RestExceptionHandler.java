@@ -48,15 +48,6 @@ public class RestExceptionHandler {
                 .body(body);
     }
 
-    // 4) (Opcional) Qualquer outra exceção não prevista cai aqui
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<RestErrorMessage> handleGeneric(Exception ex) {
-        // Evite expor stacktrace em produção; retorne mensagem genérica ou ex.getMessage()
-        RestErrorMessage body = new RestErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno no servidor");
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(body);
-    }
 
     // 5) Quando o Login estiver incorreto
     @ExceptionHandler(BadCredentialsException.class)

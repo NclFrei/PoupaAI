@@ -3,6 +3,8 @@ package br.com.poupaAI.usuarios.controller;
 import br.com.poupaAI.usuarios.business.dto.UsuarioDTO;
 import br.com.poupaAI.usuarios.business.dto.UsuarioPatchDTO;
 import br.com.poupaAI.usuarios.business.service.UsuarioService;
+import br.com.poupaAI.usuarios.infrastructure.exceptions.ConflictException;
+import br.com.poupaAI.usuarios.infrastructure.exceptions.ResourceNotFoundException;
 import br.com.poupaAI.usuarios.infrastructure.security.JwtUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,9 +42,8 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<UsuarioDTO> buscarUsuarioPorEmail(@RequestParam("email") String email) {
-        UsuarioDTO dto = usuarioService.buscarUsuarioPorEmail(email);
-        return ResponseEntity.ok(dto);
+    public UsuarioDTO buscarUsuarioPorEmail(@RequestParam("email") String email) {
+        return usuarioService.buscarUsuarioPorEmail(email);
     }
 
     @DeleteMapping("/{email}")

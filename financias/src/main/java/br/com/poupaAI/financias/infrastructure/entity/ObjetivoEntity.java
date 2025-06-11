@@ -1,15 +1,10 @@
 package br.com.poupaAI.financias.infrastructure.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -19,13 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Objetivo {
+public class ObjetivoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "descricao", length = 150)
+    @Column(name = "nome", length = 100)
     private String nome;
 
     @Column(name = "descricao", length = 150)
@@ -46,7 +41,7 @@ public class Objetivo {
     private LocalDateTime dataAlvo;
 
     @OneToMany(mappedBy = "objetivo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transacao> transacoes;
+    private List<TransacaoEntity> transacoes;
 
     private String emailUsuario;
 

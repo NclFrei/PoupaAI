@@ -71,7 +71,7 @@ public class UsuarioService {
     }
 
     public UsuarioDTO atualizaDadosUsuario(String token, UsuarioPatchDTO dto) {
-        String email = jwtUtil.extrairEmailToken(token.substring(7));
+        String email = jwtUtil.extractUsername(token.substring(7));
 
         Usuario usuarioOriginal  = usuarioRepository.findByEmail(email)
                 .orElseThrow(() ->
