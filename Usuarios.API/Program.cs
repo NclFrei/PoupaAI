@@ -1,4 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using Usuarios.Infrastructure.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<UsuariosContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("MySqlConnection")
+    )
+);
+
 
 // Add services to the container.
 
