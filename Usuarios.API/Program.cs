@@ -1,5 +1,11 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Usuarios.Application.Mapper;
+using Usuarios.Application.Services;
+using Usuarios.Domain.Interfaces;
 using Usuarios.Infrastructure.Data;
+using Usuarios.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +15,13 @@ builder.Services.AddDbContext<UsuariosContext>(options =>
     )
 );
 
-
 // Add services to the container.
+builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddMaps(typeof(UsuarioProfile).Assembly);
+});
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
