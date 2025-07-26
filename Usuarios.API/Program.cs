@@ -1,36 +1,88 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text;
 using Usuarios.Application.Mapper;
 using Usuarios.Application.Services;
 using Usuarios.Domain.Interfaces;
+using Usuarios.Infrastructure.Configuration;
 using Usuarios.Infrastructure.Data;
+using Usuarios.Infrastructure.Interfaces;
 using Usuarios.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<UsuariosContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("MySqlConnection")
-    )
-);
+// Configurações do JWT
+builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("JWTSettings"));
+var jwtSettings = builder.Configuration.GetSection("JWTSettings").Get<JWTSettings>();
 
-// Add services to the container.
-builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = true;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+    };
+});
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "Usuarios.API", Version = "v1" });
+
+    var jwtSecurityScheme = new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Name = "JWT Authentication",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Description = "Insira o token JWT no campo abaixo.",
+        Reference = new Microsoft.OpenApi.Models.OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme
+        }
+    };
+
+    c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
+});
+
+
+builder.Services.AddDbContext<UsuariosContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MySqlConnection")));
+
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddMaps(typeof(UsuarioProfile).Assembly);
 });
+
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<IJwtSettingsProvider, JwtSettingsProvider>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -39,6 +91,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Middleware de autenticação e autorização
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

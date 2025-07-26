@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using Usuarios.Infrastructure.Data;
 
 namespace Usuarios.Application.Services;
 
+[Authorize]
 public class UsuarioService
 {
     private readonly IUsuarioRepository _usuarioRepository;
