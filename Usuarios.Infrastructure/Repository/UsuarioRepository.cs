@@ -40,4 +40,12 @@ public class UsuarioRepository : IUsuarioRepository
         await _context.SaveChangesAsync();
         return usuario;
     }
+
+    public async Task<bool> DeleteAsync(Usuario usuario)
+    {
+        _context.Usuarios.Remove(usuario);
+        await _context.SaveChangesAsync();
+        return true;
+
+    }
 }

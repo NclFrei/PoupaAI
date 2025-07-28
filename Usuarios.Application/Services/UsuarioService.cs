@@ -46,6 +46,17 @@ public class UsuarioService
 
         return _mapper.Map<UsuarioResponse>(usuario);
     }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var usuario = await _usuarioRepository.BuscarPorIdAsync(id);
+        if (usuario == null)
+            return false;
+
+        return await _usuarioRepository.DeleteAsync(usuario); 
+    }
+        
+      
 }
 
 

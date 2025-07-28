@@ -42,4 +42,14 @@ public class UsuarioController : ControllerBase
         return Ok(usuario);
     }
 
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeletarUsuario(int id)
+    {
+        var delete = await _usuarioService.DeleteAsync(id);
+        if (!delete)
+            return NotFound($"Não foi possível remover: usuário com ID {id} não encontrado.");
+
+        return NoContent(); 
+    }
+
 }
