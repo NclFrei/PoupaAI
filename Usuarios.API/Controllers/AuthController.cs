@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Usuarios.Application.Services;
 using Usuarios.Domain.DTOs.Request;
+using Usuarios.Domain.DTOs.Response;
 
 namespace Usuarios.API.Controllers
 {
@@ -26,6 +27,20 @@ namespace Usuarios.API.Controllers
             catch (Exception ex)
             {
                 return Unauthorized(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("cadastro")]
+        public async Task<ActionResult<UsuarioResponse>> CriarUsuario([FromBody] UsuarioCreateRequest request)
+        {
+            try
+            {
+                var usuarioResponse = await _authService.CreateUserAsync(request);
+                return Created("", usuarioResponse);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
         }
     }

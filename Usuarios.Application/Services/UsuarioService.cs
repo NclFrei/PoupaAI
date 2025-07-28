@@ -14,7 +14,6 @@ using Usuarios.Infrastructure.Data;
 
 namespace Usuarios.Application.Services;
 
-[Authorize]
 public class UsuarioService
 {
     private readonly IUsuarioRepository _usuarioRepository;

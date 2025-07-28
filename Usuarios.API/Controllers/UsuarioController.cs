@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Usuarios.Application.Services;
 using Usuarios.Domain.DTOs.Request;
@@ -8,6 +9,7 @@ namespace Usuarios.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class UsuarioController : ControllerBase
 {
 
@@ -24,13 +26,14 @@ public class UsuarioController : ControllerBase
         try
         {
             var usuarioResponse = await _usuarioService.CreateUserAsync(request);
-            return CreatedAtAction(nameof(ObterUsuario), new { id = usuarioResponse.Id }, usuarioResponse);
+            return Created("", usuarioResponse);
         }
         catch (InvalidOperationException ex)
         {
             return BadRequest(new { message = ex.Message });
         }
     }
+
     [HttpGet("{id}")]
     public async Task<ActionResult<UsuarioResponse>> ObterUsuario(int id)
     {
