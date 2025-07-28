@@ -55,4 +55,12 @@ public class UsuarioController : ControllerBase
         return NoContent(); 
     }
 
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> AtualizarPerfil(int id, [FromBody] AtualizarUsuarioRequest request)
+    {
+        var atualizado = await _usuarioService.AtualizarPerfilAsync(id, request);
+
+        return Ok(atualizado);
+    }
+
 }

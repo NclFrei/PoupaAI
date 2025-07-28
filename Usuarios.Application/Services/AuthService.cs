@@ -9,6 +9,7 @@ using Usuarios.Domain.DTOs.Request;
 using Usuarios.Domain.DTOs.Response;
 using Usuarios.Domain.Interfaces;
 using Usuarios.Domain.Models;
+using BCrypt.Net;
 
 namespace Usuarios.Application.Services;
 
@@ -35,7 +36,7 @@ public class AuthService
             throw new Exception("Usuário não encontrado.");
 
 
-        if (usuario.Senha != request.Senha)
+        if (!usuario.CheckPassword(request.Senha))
             throw new Exception("Senha inválida.");
 
 
@@ -56,6 +57,7 @@ public class AuthService
             throw new InvalidOperationException("Email já cadastrado.");
 
         var usuario = _mapper.Map<Usuario>(userRequest);
+        usuario.SetPassword(userRequest.Senha);
         var usuarioCriado = await _usuarioRepository.CriarAsync(usuario);
 
         return _mapper.Map<UsuarioResponse>(usuarioCriado);

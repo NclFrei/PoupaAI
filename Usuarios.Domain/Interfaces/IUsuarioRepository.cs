@@ -14,4 +14,5 @@ public interface IUsuarioRepository
     Task<bool> VerificaEmailExisteAsync(string email);
     Task<Usuario> CriarAsync(Usuario usuario);
     Task<bool> DeleteAsync(Usuario usuario);
+    Task<Usuario> AtualizarAsync(Usuario usuario);
 }

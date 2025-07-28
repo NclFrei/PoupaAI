@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,7 @@ public class UsuarioService
             throw new InvalidOperationException("Email já cadastrado.");
 
         var usuario = _mapper.Map<Usuario>(userRequest);
+        usuario.SetPassword(userRequest.Senha);
         var usuarioCriado = await _usuarioRepository.CriarAsync(usuario);
 
         return _mapper.Map<UsuarioResponse>(usuarioCriado);
@@ -54,8 +56,23 @@ public class UsuarioService
 
         return await _usuarioRepository.DeleteAsync(usuario); 
     }
-        
-      
+
+    public async Task<Usuario> AtualizarPerfilAsync(int id, AtualizarUsuarioRequest request)
+    {
+        var usuario = await _usuarioRepository.BuscarPorIdAsync(id);
+        if (usuario == null)
+            throw new InvalidOperationException("Usuário não encontrado.");
+
+        _mapper.Map(request, usuario);
+
+        if (!string.IsNullOrWhiteSpace(request.Senha))
+            usuario.SetPassword(request.Senha);
+
+        await _usuarioRepository.AtualizarAsync(usuario);
+        return usuario;
+    }
+
+
 }
 
 
