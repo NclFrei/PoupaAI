@@ -1,12 +1,15 @@
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Usuarios.Application.Mapper;
 using Usuarios.Application.Services;
+using Usuarios.Domain.DTOs.Request;
 using Usuarios.Domain.Interfaces;
+using Usuarios.Domain.Validator;
 using Usuarios.Infrastructure.Configuration;
 using Usuarios.Infrastructure.Data;
 using Usuarios.Infrastructure.Interfaces;
@@ -77,6 +80,7 @@ builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IJwtSettingsProvider, JwtSettingsProvider>();
+builder.Services.AddScoped<IValidator<UsuarioCreateRequest>, UsuarioCreateRequestValidator>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

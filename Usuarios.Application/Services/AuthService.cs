@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BCrypt.Net;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,6 @@ using Usuarios.Domain.DTOs.Request;
 using Usuarios.Domain.DTOs.Response;
 using Usuarios.Domain.Interfaces;
 using Usuarios.Domain.Models;
-using BCrypt.Net;
 
 namespace Usuarios.Application.Services;
 
@@ -19,12 +20,14 @@ public class AuthService
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly TokenService _tokenService;
     private readonly IMapper _mapper;
+    private readonly IValidator<UsuarioCreateRequest> _validator;
 
-    public AuthService(IUsuarioRepository usuarioRepository, TokenService tokenService, IMapper mapper)
+    public AuthService(IUsuarioRepository usuarioRepository, TokenService tokenService, IMapper mapper, IValidator<UsuarioCreateRequest> validator)
     {
         _usuarioRepository = usuarioRepository;
         _tokenService = tokenService;
         _mapper = mapper;
+        _validator = validator;
     }
 
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
@@ -47,12 +50,17 @@ public class AuthService
         {
             Token = token,
             Email = usuario.Email,
-            Nome = usuario.Nome 
+            Nome = usuario.Nome
         };
     }
 
     public async Task<UsuarioResponse> CreateUserAsync(UsuarioCreateRequest userRequest)
     {
+        var validationResult = await _validator.ValidateAsync(userRequest);
+
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors); // Do FluentValidation
+
         if (await _usuarioRepository.VerificaEmailExisteAsync(userRequest.Email))
             throw new InvalidOperationException("Email já cadastrado.");
 
