@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Usuarios.API.Filters;
+using Usuarios.API.Middleware;
 using Usuarios.Application.Mapper;
 using Usuarios.Application.Services;
 using Usuarios.Domain.DTOs.Request;
@@ -81,6 +83,9 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IJwtSettingsProvider, JwtSettingsProvider>();
 builder.Services.AddScoped<IValidator<UsuarioCreateRequest>, UsuarioCreateRequestValidator>();
+builder.Services.AddControllers(options =>
+    options.Filters.Add(typeof(ExceptionFilter)) 
+);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -93,6 +98,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 
 // Middleware de autenticação e autorização

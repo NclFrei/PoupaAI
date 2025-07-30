@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Usuarios.Application.Mapper;
 using Usuarios.Domain.DTOs.Request;
 using Usuarios.Domain.DTOs.Response;
+using Usuarios.Domain.ExceptionsBase;
 using Usuarios.Domain.Interfaces;
 using Usuarios.Domain.Models;
 
@@ -56,10 +57,13 @@ public class AuthService
 
     public async Task<UsuarioResponse> CreateUserAsync(UsuarioCreateRequest userRequest)
     {
-        var validationResult = await _validator.ValidateAsync(userRequest);
+        var result = await _validator.ValidateAsync(userRequest);
 
-        if (!validationResult.IsValid)
-            throw new ValidationException(validationResult.Errors); // Do FluentValidation
+        if (!result.IsValid)
+        {
+            var errorMessages = result.Errors.Select(e => e.ErrorMessage).ToList();
+            throw new ErrorOnValidationException(errorMessages);
+        }
 
         if (await _usuarioRepository.VerificaEmailExisteAsync(userRequest.Email))
             throw new InvalidOperationException("Email já cadastrado.");

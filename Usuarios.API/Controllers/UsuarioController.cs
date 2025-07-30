@@ -12,7 +12,6 @@ namespace Usuarios.API.Controllers;
 [Authorize]
 public class UsuarioController : ControllerBase
 {
-
     private readonly UsuarioService _usuarioService;
 
     public UsuarioController(UsuarioService usuarioService)
@@ -23,22 +22,14 @@ public class UsuarioController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<UsuarioResponse>> CriarUsuario([FromBody] UsuarioCreateRequest request)
     {
-        try
-        {
-            var usuarioResponse = await _usuarioService.CreateUserAsync(request);
-            return Created("", usuarioResponse);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var usuarioResponse = await _usuarioService.CreateUserAsync(request);
+        return CreatedAtAction(nameof(ObterUsuario), new { id = usuarioResponse.Id }, usuarioResponse);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<UsuarioResponse>> ObterUsuario(int id)
     {
         var usuario = await _usuarioService.GetUserByIdAsync(id);
-
         if (usuario == null)
             return NotFound();
 
@@ -52,15 +43,13 @@ public class UsuarioController : ControllerBase
         if (!delete)
             return NotFound($"Não foi possível remover: usuário com ID {id} não encontrado.");
 
-        return NoContent(); 
+        return NoContent();
     }
 
     [HttpPatch("{id}")]
     public async Task<IActionResult> AtualizarPerfil(int id, [FromBody] AtualizarUsuarioRequest request)
     {
         var atualizado = await _usuarioService.AtualizarPerfilAsync(id, request);
-
         return Ok(atualizado);
     }
-
 }
