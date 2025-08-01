@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Financias.API", "Financias.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Financias.Domain", "Financias.Domain\Financias.Domain.csproj", "{058E7920-DF06-474E-BAC3-971C9BAEB57B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Financias.Infrastructure", "Financias.Infrastructure\Financias.Infrastructure.csproj", "{324A9713-9854-44D1-967B-3E0C42C2C372}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{058E7920-DF06-474E-BAC3-971C9BAEB57B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{058E7920-DF06-474E-BAC3-971C9BAEB57B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{058E7920-DF06-474E-BAC3-971C9BAEB57B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{324A9713-9854-44D1-967B-3E0C42C2C372}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{324A9713-9854-44D1-967B-3E0C42C2C372}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{324A9713-9854-44D1-967B-3E0C42C2C372}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{324A9713-9854-44D1-967B-3E0C42C2C372}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{A74A35D8-860F-4FA9-B462-47C4331A8B4A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{C8267010-8244-4F07-89F0-809352C907AE} = {1E3AE8AB-47C5-4CF2-A3ED-8C99551591B6}
 		{058E7920-DF06-474E-BAC3-971C9BAEB57B} = {1E3AE8AB-47C5-4CF2-A3ED-8C99551591B6}
+		{324A9713-9854-44D1-967B-3E0C42C2C372} = {1E3AE8AB-47C5-4CF2-A3ED-8C99551591B6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {971615EC-CA0B-4BE6-87E5-1AFDDEF2D4BC}
