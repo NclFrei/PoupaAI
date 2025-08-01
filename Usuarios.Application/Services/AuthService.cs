@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Usuarios.Application.Mapper;
 using Usuarios.Domain.DTOs.Request;
 using Usuarios.Domain.DTOs.Response;
-using Usuarios.Domain.ExceptionsBase;
 using Usuarios.Domain.Interfaces;
 using Usuarios.Domain.Models;
 
@@ -61,8 +60,11 @@ public class AuthService
 
         if (!result.IsValid)
         {
-            var errorMessages = result.Errors.Select(e => e.ErrorMessage).ToList();
-            throw new ErrorOnValidationException(errorMessages);
+           var errors = result.Errors
+                .Select(e => $"{e.PropertyName}: {e.ErrorMessage} ")
+                    .ToList();
+
+                throw new ValidationException(string.Join(Environment.NewLine, errors));
         }
 
         if (await _usuarioRepository.VerificaEmailExisteAsync(userRequest.Email))

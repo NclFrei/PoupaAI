@@ -26,18 +26,6 @@ public class UsuarioService
         _mapper = mapper;
     }
 
-    public async Task<UsuarioResponse> CreateUserAsync(UsuarioCreateRequest userRequest)
-    {
-        if (await _usuarioRepository.VerificaEmailExisteAsync(userRequest.Email))
-            throw new InvalidOperationException("Email já cadastrado.");
-
-        var usuario = _mapper.Map<Usuario>(userRequest);
-        usuario.SetPassword(userRequest.Senha);
-        var usuarioCriado = await _usuarioRepository.CriarAsync(usuario);
-
-        return _mapper.Map<UsuarioResponse>(usuarioCriado);
-    }
-
     public async Task<UsuarioResponse?> GetUserByIdAsync(int id)
     {
         var usuario = await _usuarioRepository.BuscarPorIdAsync(id);

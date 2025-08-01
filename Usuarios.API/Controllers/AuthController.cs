@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Usuarios.Application.Services;
 using Usuarios.Domain.DTOs.Request;
 using Usuarios.Domain.DTOs.Response;
-using Usuarios.Domain.ExceptionsBase;
 using FluentValidation;
 
 namespace Usuarios.API.Controllers
@@ -30,7 +29,7 @@ namespace Usuarios.API.Controllers
         public async Task<ActionResult<UsuarioResponse>> CriarUsuario([FromBody] UsuarioCreateRequest request)
         {
             var usuarioResponse = await _authService.CreateUserAsync(request);
-            return CreatedAtAction(null, usuarioResponse); // Você pode substituir null pela action de obter usuário
+            return CreatedAtAction(null, usuarioResponse); 
         }
     }
 }

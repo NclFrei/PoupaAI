@@ -19,13 +19,6 @@ public class UsuarioController : ControllerBase
         _usuarioService = usuarioService;
     }
 
-    [HttpPost]
-    public async Task<ActionResult<UsuarioResponse>> CriarUsuario([FromBody] UsuarioCreateRequest request)
-    {
-        var usuarioResponse = await _usuarioService.CreateUserAsync(request);
-        return CreatedAtAction(nameof(ObterUsuario), new { id = usuarioResponse.Id }, usuarioResponse);
-    }
-
     [HttpGet("{id}")]
     public async Task<ActionResult<UsuarioResponse>> ObterUsuario(int id)
     {

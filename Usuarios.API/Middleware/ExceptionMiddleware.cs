@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text.Json;
 using Usuarios.API.Erros;
-using Usuarios.Domain.ExceptionsBase;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace Usuarios.API.Middleware;
 
@@ -25,55 +25,35 @@ public class ExceptionMiddleware
         {
             await _next(context);
         }
+        catch (ValidationException validationEx)
+        {
+            _logger.LogError(validationEx, validationEx.Message);
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+            var response = _env.IsDevelopment() ?
+                new ApiException(context.Response.StatusCode.ToString(), validationEx.Message, validationEx.StackTrace.ToString()) :
+                new ApiException(context.Response.StatusCode.ToString(), validationEx.Message, "Erro de validação");
+
+            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+            var json = JsonSerializer.Serialize(response, options);
+
+            await context.Response.WriteAsync(json);
+
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, ex.Message);
             context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            // Define o status apropriado
-            context.Response.StatusCode = ex switch
-            {
-                ValidationException _ => (int)HttpStatusCode.BadRequest,
-                ErrorOnValidationException _ => (int)HttpStatusCode.BadRequest,
-                InvalidOperationException _ => (int)HttpStatusCode.BadRequest,
-                KeyNotFoundException _ => (int)HttpStatusCode.NotFound,
-                _ => (int)HttpStatusCode.InternalServerError
-            };
+            var response = _env.IsDevelopment() ?
+                new ApiException(context.Response.StatusCode.ToString(), ex.Message, ex.StackTrace.ToString()) :
+                new ApiException(context.Response.StatusCode.ToString(), ex.Message, "Erro Interno do servidor");
 
-            // Cria o objeto de resposta padronizado
-            object response = ex switch
-            {
-                ValidationException ve => new
-                {
-                    statusCode = context.Response.StatusCode,
-                    message = "Erro de validação.",
-                    errors = ve.Errors.Select(e => e.ErrorMessage)
-                },
-                ErrorOnValidationException ce => new
-                {
-                    statusCode = context.Response.StatusCode,
-                    message = "Erro de validação.",
-                    errors = ce.ErrorMessages
-                },
-                InvalidOperationException ioe => new
-                {
-                    statusCode = context.Response.StatusCode,
-                    message = ioe.Message
-                },
-                _ => new
-                {
-                    statusCode = context.Response.StatusCode,
-                    message = _env.IsDevelopment() ? ex.Message : "Ocorreu um erro interno no servidor.",
-                    stackTrace = _env.IsDevelopment() ? ex.StackTrace?.ToString() : null
-                }
-            };
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            };
-
+            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
             var json = JsonSerializer.Serialize(response, options);
+
             await context.Response.WriteAsync(json);
         }
     }
