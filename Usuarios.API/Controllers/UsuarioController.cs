@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Usuarios.API.DTOs.Request;
+using Usuarios.API.DTOs.Response;
 using Usuarios.Application.Services;
-using Usuarios.Domain.DTOs.Request;
-using Usuarios.Domain.DTOs.Response;
 
 namespace Usuarios.API.Controllers;
 

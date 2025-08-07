@@ -5,16 +5,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Usuarios.API.Configuration;
+using Usuarios.API.Data;
+using Usuarios.API.DTOs.Request;
+using Usuarios.API.Interfaces;
+using Usuarios.API.Mapper;
 using Usuarios.API.Middleware;
-using Usuarios.Application.Mapper;
+using Usuarios.API.Repository;
+using Usuarios.API.Services;
+using Usuarios.API.Validator;
 using Usuarios.Application.Services;
-using Usuarios.Domain.DTOs.Request;
-using Usuarios.Domain.Interfaces;
-using Usuarios.Domain.Validator;
-using Usuarios.Infrastructure.Configuration;
-using Usuarios.Infrastructure.Data;
-using Usuarios.Infrastructure.Interfaces;
-using Usuarios.Infrastructure.Repository;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,8 +1,8 @@
-using Financias.Application.Mapper;
-using Financias.Application.Services;
-using Financias.Infrastructure.Configuration;
-using Financias.Infrastructure.Data;
-using Financias.Infrastructure.HttpClients;
+using Financias.API.Configuration;
+using Financias.API.Data;
+using Financias.API.HttpClients;
+using Financias.API.Mapper;
+using Financias.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
