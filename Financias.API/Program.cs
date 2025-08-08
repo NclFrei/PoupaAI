@@ -28,16 +28,6 @@ builder.Services.AddAutoMapper(cfg =>
 
 builder.Services.AddScoped<TransacaoService>();
 
-builder.Services.AddHttpClient<UsuarioServiceHttpClient>(client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["Services:Usuario"]);
-});
-
-builder.Services.AddHttpClient<UsuarioServiceHttpClient>(client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["Services:Usuario"]);
-});
-
 // Configurações do JWT
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWTSettings"));
 var jwtSettings = builder.Configuration.GetSection("JWTSettings").Get<JwtSettings>();

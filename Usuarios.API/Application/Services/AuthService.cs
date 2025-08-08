@@ -73,7 +73,10 @@ public class AuthService
         usuario.SetPassword(userRequest.Senha);
         var usuarioCriado = await _usuarioRepository.CriarAsync(usuario);
 
-        _rabbitMqClient.PublicaUsuarioCriado(usuarioCriado);
+
+        var usuarioResponseEvent = _mapper.Map<UsuarioResponseEvent>(usuarioCriado);
+
+        _rabbitMqClient.PublicaUsuarioCriado(usuarioResponseEvent);
 
         return _mapper.Map<UsuarioResponse>(usuarioCriado);
     }

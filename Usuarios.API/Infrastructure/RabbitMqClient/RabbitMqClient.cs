@@ -3,6 +3,7 @@ using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
 using System.Text.Unicode;
+using Usuarios.API.Domain.DTOs.Response;
 using Usuarios.API.Domain.Models;
 
 namespace Usuarios.API.Infrastructure.RabbitMqClient;
@@ -22,7 +23,7 @@ public class RabbitMqClient : IRabbitMqClient
         _channel.ExchangeDeclare(exchange: "trigger", type: ExchangeType.Fanout);
     }
 
-    public void PublicaUsuarioCriado(Usuario usuarioCriado)
+    public void PublicaUsuarioCriado(UsuarioResponseEvent usuarioCriado)
     {
         var message = JsonSerializer.Serialize(usuarioCriado);
         var body = Encoding.UTF8.GetBytes(message);

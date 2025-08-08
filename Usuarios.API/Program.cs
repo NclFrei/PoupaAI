@@ -108,6 +108,7 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddSingleton<IRabbitMqClient, RabbitMqClient>();
 builder.Services.AddScoped<IValidator<UsuarioCreateRequest>, UsuarioCreateRequestValidator>();
+builder.Services.AddScoped<IJwtSettingsProvider, JwtSettingsProvider>();
 
 
 builder.Services.AddControllers();
