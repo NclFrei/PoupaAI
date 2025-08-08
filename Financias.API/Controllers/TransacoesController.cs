@@ -1,5 +1,5 @@
-﻿using Financias.API.Dtos.Request;
-using Financias.API.Services;
+﻿using Financias.API.Application.Services;
+using Financias.API.Dtos.Request;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Financias.API.Controllers;
@@ -20,23 +20,9 @@ public class TransacoesController : ControllerBase
     {
         try
         {
-            Console.WriteLine("---- INÍCIO DA REQUISIÇÃO ----");
-            Console.WriteLine($"Método: {Request.Method}");
-            Console.WriteLine($"Path: {Request.Path}");
-            Console.WriteLine($"QueryString: {Request.QueryString}");
-
-            Console.WriteLine("Headers:");
-            foreach (var header in Request.Headers)
-            {
-                Console.WriteLine($"{header.Key}: {header.Value}");
-            }
-
-            Console.WriteLine("Corpo da requisição (JSON):");
+          
             var requestBody = System.Text.Json.JsonSerializer.Serialize(request);
-            Console.WriteLine(requestBody);
-            Console.WriteLine("---- FIM DA REQUISIÇÃO ----");
 
-            // Verifica se tem Authorization e extrai o token
             if (!Request.Headers.ContainsKey("Authorization") ||
                 !Request.Headers["Authorization"].ToString().StartsWith("Bearer "))
             {
@@ -53,18 +39,6 @@ public class TransacoesController : ControllerBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine("---- INÍCIO DA REQUISIÇÃO ----");
-            Console.WriteLine($"Método: {Request.Method}");
-            Console.WriteLine($"Path: {Request.Path}");
-            Console.WriteLine($"QueryString: {Request.QueryString}");
-
-            Console.WriteLine("Headers:");
-            foreach (var header in Request.Headers)
-            {
-                Console.WriteLine($"{header.Key}: {header.Value}");
-            }
-
-            Console.WriteLine("Corpo da requisição (JSON):");
             var requestBody = System.Text.Json.JsonSerializer.Serialize(request);
             Console.WriteLine(requestBody);
             Console.WriteLine("---- FIM DA REQUISIÇÃO ----");

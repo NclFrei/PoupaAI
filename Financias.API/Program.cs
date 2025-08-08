@@ -1,8 +1,8 @@
-using Financias.API.Configuration;
-using Financias.API.Data;
+using Financias.API.Application.Mapper;
+using Financias.API.Application.Services;
 using Financias.API.HttpClients;
-using Financias.API.Mapper;
-using Financias.API.Services;
+using Financias.API.Infrastructure.Configuration;
+using Financias.API.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -39,8 +39,8 @@ builder.Services.AddHttpClient<UsuarioServiceHttpClient>(client =>
 });
 
 // Configurações do JWT
-builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("JWTSettings"));
-var jwtSettings = builder.Configuration.GetSection("JWTSettings").Get<JWTSettings>();
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWTSettings"));
+var jwtSettings = builder.Configuration.GetSection("JWTSettings").Get<JwtSettings>();
 
 builder.Services.AddAuthentication(options =>
 {

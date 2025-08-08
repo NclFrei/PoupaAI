@@ -18,7 +18,6 @@ public class UsuarioServiceHttpClient
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"api/Usuario/{usuarioId}");
 
-        // Adiciona o cabeçalho de autorização
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
 
         // Imprime o token

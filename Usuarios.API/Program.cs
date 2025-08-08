@@ -5,23 +5,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Usuarios.API.Configuration;
-using Usuarios.API.Data;
-using Usuarios.API.DTOs.Request;
-using Usuarios.API.Interfaces;
-using Usuarios.API.Mapper;
+using Usuarios.API.Application.Mapper;
+using Usuarios.API.Application.Services;
+using Usuarios.API.Domain.DTOs.Request;
+using Usuarios.API.Domain.Interfaces;
+using Usuarios.API.Domain.Validator;
+using Usuarios.API.Infrastructure.Configuration;
+using Usuarios.API.Infrastructure.Data;
+using Usuarios.API.Infrastructure.Repository;
 using Usuarios.API.Middleware;
-using Usuarios.API.Repository;
-using Usuarios.API.Services;
-using Usuarios.API.Validator;
-using Usuarios.Application.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configurações do JWT
-builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("JWTSettings"));
-var jwtSettings = builder.Configuration.GetSection("JWTSettings").Get<JWTSettings>();
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWTSettings"));
+var jwtSettings = builder.Configuration.GetSection("JWTSettings").Get<JwtSettings>();
 
 builder.Services.AddCors(options =>
 {
