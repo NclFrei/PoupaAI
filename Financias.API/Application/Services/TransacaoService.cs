@@ -1,6 +1,6 @@
 ﻿
 using AutoMapper;
-using Financias.API.Dtos.Request;
+using Financias.API.Domain.DTOs.Request;
 using Financias.API.HttpClients;
 
 namespace Financias.API.Application.Services;

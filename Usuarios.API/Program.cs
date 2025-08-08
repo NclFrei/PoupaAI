@@ -12,6 +12,7 @@ using Usuarios.API.Domain.Interfaces;
 using Usuarios.API.Domain.Validator;
 using Usuarios.API.Infrastructure.Configuration;
 using Usuarios.API.Infrastructure.Data;
+using Usuarios.API.Infrastructure.RabbitMqClient;
 using Usuarios.API.Infrastructure.Repository;
 using Usuarios.API.Middleware;
 
@@ -51,7 +52,6 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
     };
 
-    // Adicione esta seção para capturar eventos de autenticação
     options.Events = new JwtBearerEvents
     {
         OnAuthenticationFailed = context =>
@@ -106,7 +106,7 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
-
+builder.Services.AddSingleton<IRabbitMqClient, RabbitMqClient>();
 builder.Services.AddScoped<IValidator<UsuarioCreateRequest>, UsuarioCreateRequestValidator>();
 
 

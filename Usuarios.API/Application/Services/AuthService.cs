@@ -4,6 +4,7 @@ using Usuarios.API.Domain.DTOs.Request;
 using Usuarios.API.Domain.DTOs.Response;
 using Usuarios.API.Domain.Interfaces;
 using Usuarios.API.Domain.Models;
+using Usuarios.API.Infrastructure.RabbitMqClient;
 
 
 namespace Usuarios.API.Application.Services;
@@ -15,13 +16,17 @@ public class AuthService
     private readonly TokenService _tokenService;
     private readonly IMapper _mapper;
     private readonly IValidator<UsuarioCreateRequest> _validator;
+    private IRabbitMqClient _rabbitMqClient;
 
-    public AuthService(IUsuarioRepository usuarioRepository, TokenService tokenService, IMapper mapper, IValidator<UsuarioCreateRequest> validator)
+
+
+    public AuthService(IUsuarioRepository usuarioRepository, TokenService tokenService, IMapper mapper, IValidator<UsuarioCreateRequest> validator, IRabbitMqClient rabbitMqClient)
     {
         _usuarioRepository = usuarioRepository;
         _tokenService = tokenService;
         _mapper = mapper;
         _validator = validator;
+        _rabbitMqClient = rabbitMqClient;
     }
 
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
@@ -67,6 +72,8 @@ public class AuthService
         var usuario = _mapper.Map<Usuario>(userRequest);
         usuario.SetPassword(userRequest.Senha);
         var usuarioCriado = await _usuarioRepository.CriarAsync(usuario);
+
+        _rabbitMqClient.PublicaUsuarioCriado(usuarioCriado);
 
         return _mapper.Map<UsuarioResponse>(usuarioCriado);
     }

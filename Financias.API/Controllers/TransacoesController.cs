@@ -1,5 +1,5 @@
 ﻿using Financias.API.Application.Services;
-using Financias.API.Dtos.Request;
+using Financias.API.Domain.DTOs.Request;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Financias.API.Controllers;

@@ -5,9 +5,9 @@ namespace Financias.API.Infrastructure.Configuration;
 
 public class JwtSettingsProvider : IJwtSettingsProvider
 {
-    private readonly JWTSettings _jwtSettings;
+    private readonly JwtSettings _jwtSettings;
 
-    public JwtSettingsProvider(IOptions<JWTSettings> jwtSettings)
+    public JwtSettingsProvider(IOptions<JwtSettings> jwtSettings)
     {
         _jwtSettings = jwtSettings.Value;
     }
