@@ -3,8 +3,9 @@
 public class Usuario
 {
     public int Id { get; set; }
-    public int IdExterno { get; set; } // ID do usuário no sistema externo
+    public int IdExterno { get; set; } 
     public string Nome { get; set; }
     public string Email { get; set; }
     public DateTime DataCadastro { get; set; }
+    public decimal Saldo { get; set; }
 }

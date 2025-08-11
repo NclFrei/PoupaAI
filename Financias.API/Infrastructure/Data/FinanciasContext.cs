@@ -10,4 +10,5 @@ public class FinanciasContext : DbContext
 
     public DbSet<Transacoes> Transacoes { get; set; }
     public DbSet<Categoria> Categorias { get; set; }
+    public DbSet<Usuario> Usuarios { get; set; }
 }

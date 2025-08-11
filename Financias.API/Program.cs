@@ -1,6 +1,5 @@
 using Financias.API.Application.Mapper;
 using Financias.API.Application.Services;
-using Financias.API.HttpClients;
 using Financias.API.Infrastructure.Configuration;
 using Financias.API.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<FinanciasContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MySqlConnection")));
 
 builder.Services.AddAutoMapper(cfg =>
 {
@@ -81,14 +80,17 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 
-
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var db = scope.ServiceProvider.GetRequiredService<FinanciasContext>();
+    db.Database.Migrate();
 }
+
+
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 

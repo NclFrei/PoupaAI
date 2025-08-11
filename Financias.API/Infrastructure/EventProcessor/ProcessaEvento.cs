@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Financias.API.Domain.DTOs.Request;
+using Financias.API.Domain.Interfaces;
 using Financias.API.Domain.Models;
 using System.Text.Json;
 
@@ -26,10 +27,9 @@ public class ProcessaEvento : IProcessaEvento
 
         var usuario = _mapper.Map<Usuario>(usuarioReadDto);
 
-        if(!usuarioRepository.ExisteUsuario(usuario.Id))
+        if(!usuarioRepository.ExisteUsuarioExterno(usuario.Id))
         {
-            usuarioRepository.CriaUsuario(usuario);
-            usuarioRepository.SaveChanges();
+            usuarioRepository.CreateUsuario(usuario);
         }
     }
        
