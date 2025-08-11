@@ -47,7 +47,7 @@ namespace Financias.Infrastructure.Migrations
                     b.ToTable("Categorias");
                 });
 
-            modelBuilder.Entity("Financias.API.Domain.Models.Transacoes", b =>
+            modelBuilder.Entity("Financias.API.Domain.Models.Transacao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,6 +69,9 @@ namespace Financias.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Tipo")
+                        .HasColumnType("int");
+
                     b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
@@ -78,6 +81,8 @@ namespace Financias.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoriaId");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Transacoes");
                 });
@@ -112,7 +117,7 @@ namespace Financias.Infrastructure.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("Financias.API.Domain.Models.Transacoes", b =>
+            modelBuilder.Entity("Financias.API.Domain.Models.Transacao", b =>
                 {
                     b.HasOne("Financias.API.Domain.Models.Categoria", "Categoria")
                         .WithMany()
@@ -120,7 +125,18 @@ namespace Financias.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Financias.API.Domain.Models.Usuario", null)
+                        .WithMany("Transacoes")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Categoria");
+                });
+
+            modelBuilder.Entity("Financias.API.Domain.Models.Usuario", b =>
+                {
+                    b.Navigation("Transacoes");
                 });
 #pragma warning restore 612, 618
         }

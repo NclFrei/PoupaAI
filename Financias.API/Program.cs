@@ -1,7 +1,11 @@
 using Financias.API.Application.Mapper;
 using Financias.API.Application.Services;
+using Financias.API.Domain.Interfaces;
 using Financias.API.Infrastructure.Configuration;
 using Financias.API.Infrastructure.Data;
+using Financias.API.Infrastructure.EventProcessor;
+using Financias.API.Infrastructure.RabbitMqClient;
+using Financias.API.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -24,10 +28,22 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddMaps(typeof(TransacaoProfile).Assembly);
 });
 
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddMaps(typeof(UsuarioProfile).Assembly);
+});
+
 
 builder.Services.AddScoped<TransacaoService>();
+builder.Services.AddScoped<CategoriaService>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<ITransacaoRepository, TransacaoRepository>();
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
-// Configurações do JWT
+builder.Services.AddHostedService<RabbitMqSubscriber>();
+builder.Services.AddSingleton<IProcessaEvento, ProcessaEvento>();
+
+// Configuraï¿½ï¿½es do JWT
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWTSettings"));
 var jwtSettings = builder.Configuration.GetSection("JWTSettings").Get<JwtSettings>();
 

@@ -22,7 +22,7 @@ namespace Usuarios.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Usuarios.Domain.Models.Usuario", b =>
+            modelBuilder.Entity("Usuarios.API.Domain.Models.Usuario", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -9,6 +9,7 @@ public class UsuarioProfile : Profile
     public UsuarioProfile()
     {
         CreateMap<UsuarioRequest, Usuario>()
-             .ForMember(dest => dest.IdExterno, opt => opt.MapFrom(src => src.Id));
+             .ForMember(dest => dest.IdExterno, opt => opt.MapFrom(src => src.Id))
+             .ForMember(dest => dest.Id, opt => opt.Ignore());
     }
 }

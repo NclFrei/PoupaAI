@@ -1,5 +1,6 @@
 ﻿using Financias.API.Application.Services;
 using Financias.API.Domain.DTOs.Request;
+using Financias.API.Domain.DTOs.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Financias.API.Controllers;
@@ -15,5 +16,24 @@ public class TransacoesController : ControllerBase
         _transacaoService = transacaoService;
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var transacao = await _transacaoService.GetTransacaoIdAsync(id);
+        if (transacao == null)
+        {
+            return NotFound();
+        }
 
+        return Ok(transacao);
+
+
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<TransacaoResponse>> Create([FromBody] TransacaoRequest transacaoRequest)
+    {
+        var response = await _transacaoService.CriarTransacaoAsync(transacaoRequest);
+        return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
+    }
 }

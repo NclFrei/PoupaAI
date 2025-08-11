@@ -1,4 +1,6 @@
-﻿namespace Financias.API.Domain.DTOs.Request;
+﻿using Financias.API.Domain.Enums;
+
+namespace Financias.API.Domain.DTOs.Request;
 
 
 public class TransacaoRequest
@@ -9,4 +11,5 @@ public class TransacaoRequest
     public decimal Valor { get; set; }
     public int CategoriaId { get; set; }
     public int UsuarioId { get; set; }
+    public TipoTransacao Tipo { get; set; }
 }

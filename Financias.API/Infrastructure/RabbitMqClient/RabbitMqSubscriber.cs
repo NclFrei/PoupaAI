@@ -37,8 +37,9 @@ public class RabbitMqSubscriber : BackgroundService
 
         consumidor.Received += (ModuleHandle, ea) =>
         {
-            ReadOnlyMemory<byte> body = ea.Body;
+            var body = ea.Body;
             var mensagem = Encoding.UTF8.GetString(body.ToArray());
+            Console.WriteLine($"Mensagem recebida: {mensagem}");
             _processaEvento.Processa(mensagem);
         };
 

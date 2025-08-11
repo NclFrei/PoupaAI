@@ -8,4 +8,6 @@ public class Usuario
     public string Email { get; set; }
     public DateTime DataCadastro { get; set; }
     public decimal Saldo { get; set; }
+
+    public ICollection<Transacao> Transacoes { get; set; } = new List<Transacao>();
 }
