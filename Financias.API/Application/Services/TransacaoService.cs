@@ -29,9 +29,13 @@ public class TransacaoService
         
         var transacao = _mapper.Map<Transacao>(transacaoRequest);
 
-        var categoria = await _categoriaService.GetUserByIdAsync(transacaoRequest.CategoriaId);
+        var categoria = await _categoriaService.GetCategoriaByIdAsync(transacaoRequest.CategoriaId);
+        if (categoria == null)
+        {
+            throw new Exception("Categoria não encontrada.");
+        }
 
-        transacao.CategoriaId = categoria.Id;  // Usa o Id real salvo no banco
+        transacao.CategoriaId = categoria.Id;  
 
         var usuario = await _usuarioRepository.BuscarPorIdAsync(transacaoRequest.UsuarioId);
         if (usuario == null)

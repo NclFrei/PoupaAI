@@ -10,6 +10,15 @@ public class CategoriaProfile : Profile
     public CategoriaProfile()
     {
         CreateMap<CategoriaRequest, Categoria>();
+        
         CreateMap<Categoria, CategoriaResponse>();
+        
+        CreateMap<AtualizarCategoriaRequest, Categoria>()
+            .ForAllMembers(opt =>
+                opt.Condition((src, dest, srcMember) =>
+                    srcMember != null &&
+                    !(srcMember is string str && string.IsNullOrWhiteSpace(str))
+                ));
     }
+    
 }

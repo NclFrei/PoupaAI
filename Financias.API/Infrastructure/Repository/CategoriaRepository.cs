@@ -1,6 +1,7 @@
 using Financias.API.Domain.Interfaces;
 using Financias.API.Domain.Models;
 using Financias.API.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Financias.API.Infrastructure.Repository;
 
@@ -21,6 +22,26 @@ public class CategoriaRepository : ICategoriaRepository
     public async Task<Categoria> CriarCategoriaAsync(Categoria categoria)
     {
         _context.Categorias.Add(categoria);
+        await _context.SaveChangesAsync();
+        return categoria;
+    }
+
+    public async Task<List<Categoria>> ListarCategoriasAsync()
+    {
+        return await _context.Categorias.ToListAsync();
+    }
+    
+    public async Task<bool> DeleteCategoriaAsync(Categoria categoria)
+    {
+        _context.Categorias.Remove(categoria);
+        await _context.SaveChangesAsync();
+        return true;
+
+    }
+
+    public async Task<Categoria> AtualizarCategoriaAsync(Categoria categoria)
+    {
+        _context.Categorias.Update(categoria);
         await _context.SaveChangesAsync();
         return categoria;
     }

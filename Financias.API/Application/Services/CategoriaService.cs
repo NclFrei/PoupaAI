@@ -17,7 +17,7 @@ public class CategoriaService
         _mapper = mapper;
     }
  
-    public async Task<CategoriaResponse?> GetUserByIdAsync(int id)
+    public async Task<CategoriaResponse?> GetCategoriaByIdAsync(int id)
     {
         var categoria = await _categoriaRepository.BuscarPorIdAsync(id);
  
@@ -34,5 +34,39 @@ public class CategoriaService
         
         return _mapper.Map<CategoriaResponse>(categoriaCriado);
     }
+    
+    public async Task<List<Categoria?>> GetAllCategoria()
+    {
+        List<Categoria> categorias = await _categoriaRepository.ListarCategoriasAsync();
+
+        if (categorias == null)
+            return null;
+
+        return categorias;
+    }
+    public async Task<bool> DeleteCategoriaAsync(int id)
+    {
+        var categoria = await _categoriaRepository.BuscarPorIdAsync(id);
+        if (categoria == null)
+            return false;
+
+        return await _categoriaRepository.DeleteCategoriaAsync(categoria); 
+    }
+
+    public async Task<Categoria> UpdateCategoriaAsync(int id, AtualizarCategoriaRequest request)
+    {
+        var categoria = await _categoriaRepository.BuscarPorIdAsync(id);
+        if (categoria == null)
+            throw new InvalidOperationException("Categoria não encontrada.");
+
+        _mapper.Map(request, categoria);
+        
+        await _categoriaRepository.AtualizarCategoriaAsync(categoria);
+        return categoria;
+    }
+    
+
+    
+    
  
 }
