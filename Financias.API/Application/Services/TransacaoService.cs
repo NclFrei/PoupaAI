@@ -50,7 +50,7 @@ public class TransacaoService
 
         transacao.UsuarioId = usuario.Id;
 
-        var transacaoCriada = await _transacaoRepository.CriarAsync(transacao);
+        var transacaoCriada = await _transacaoRepository.CreateTransacaoAsync(transacao);
         await _usuarioRepository.AtualizarAsync(usuario);
 
         return _mapper.Map<TransacaoResponse>(transacaoCriada);
@@ -58,7 +58,7 @@ public class TransacaoService
 
     public async Task<TransacaoResponse?> GetTransacaoIdAsync(int id)
     {
-        var transacao = await _transacaoRepository.BuscarPorIdAsync(id);
+        var transacao = await _transacaoRepository.GetTransacaoPorIdAsync(id);
 
         if (transacao == null)
         {
@@ -66,6 +66,46 @@ public class TransacaoService
         }
 
         return _mapper.Map<TransacaoResponse>(transacao);
+    }
+    
+    public async Task<bool> DeleteTransacaoAsync(int id)
+    {
+        var transacao = await _transacaoRepository.GetTransacaoPorIdAsync(id);
+        if (transacao == null)
+            return false;
+
+        return await _transacaoRepository.DeleteTransacaoAsync(transacao); 
+    }
+
+    public async Task<Transacao> UpdateCategoriaAsync(int id, AtualizaTransacaoRequest transacaoRequest)
+    {
+        var transacao = await _transacaoRepository.GetTransacaoPorIdAsync(id);
+        if (transacao == null)
+            throw new InvalidOperationException("Transação não encontrada.");
+        
+        if (transacaoRequest.CategoriaId.HasValue)
+        {
+            var categoriaTransacao = await _categoriaService.GetCategoriaByIdAsync(transacaoRequest.CategoriaId.Value);
+            if (categoriaTransacao == null)
+                throw new InvalidOperationException("Categoria para atualizar não encontrada.");
+            
+            transacao.CategoriaId = transacaoRequest.CategoriaId.Value;
+        }
+        
+        _mapper.Map(transacaoRequest, transacao);
+
+        await _transacaoRepository.UpdateCategoriaAsync(transacao);
+        return transacao;
+    }
+    
+    public async Task<List<Transacao?>> GetTransacaoPorUsuario(int usuarioId)
+    {
+        List<Transacao> transacao = await _transacaoRepository.GetTransacaoPorUsuarioAsync(usuarioId);
+
+        if (transacao == null)
+            return null;
+
+        return transacao;
     }
 
 

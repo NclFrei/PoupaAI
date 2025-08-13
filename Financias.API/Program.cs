@@ -14,7 +14,6 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -32,7 +31,6 @@ builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddMaps(typeof(UsuarioProfile).Assembly);
 });
-
 
 builder.Services.AddScoped<TransacaoService>();
 builder.Services.AddScoped<CategoriaService>();
@@ -68,7 +66,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { Title = "Usuarios.API", Version = "v1" });
+    c.SwaggerDoc("v1", new() { Title = "Financias.API", Version = "v1" });
 
     var jwtSecurityScheme = new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
@@ -102,11 +100,8 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
-
-
 app.UseSwagger();
 app.UseSwaggerUI();
-
 
 app.UseHttpsRedirection();
 
