@@ -29,7 +29,7 @@ public class TransacaoService
         
         var transacao = _mapper.Map<Transacao>(transacaoRequest);
 
-        var categoria = await _categoriaService.BuscarPorIdAsync(transacaoRequest.CategoriaId);
+        var categoria = await _categoriaService.GetUserByIdAsync(transacaoRequest.CategoriaId);
 
         transacao.CategoriaId = categoria.Id;  // Usa o Id real salvo no banco
 

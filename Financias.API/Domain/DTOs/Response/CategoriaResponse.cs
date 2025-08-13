@@ -1,4 +1,4 @@
-namespace Financias.API.Domain.DTOs.Reponse;
+namespace Financias.API.Domain.DTOs.Response;
 
 public class CategoriaResponse
 {

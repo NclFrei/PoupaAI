@@ -1,7 +1,7 @@
 using Financias.API.Domain.Enums;
 using Financias.API.Domain.Models;
 
-namespace Financias.API.Domain.DTOs.Reponse;
+namespace Financias.API.Domain.DTOs.Response;
 
 public class TransacaoResponse
 {
