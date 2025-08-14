@@ -21,9 +21,6 @@ public class CategoriaController : ControllerBase
     public async Task<ActionResult<CategoriaResponse>> ObterCategoria(int id)
     {
         var categoria = await _categoriaService.GetCategoriaByIdAsync(id);
-        if (categoria == null)
-            return NotFound();
- 
         return Ok(categoria);
     }
     
@@ -31,41 +28,28 @@ public class CategoriaController : ControllerBase
     public async Task<ActionResult<CategoriaResponse>> CriarCategoria([FromBody] CategoriaRequest request)
     {
         var categoriaResponse = await _categoriaService.CreateCategoriaAsync(request);
-        return CreatedAtAction(null, categoriaResponse); 
+        return CreatedAtAction(nameof(ObterCategoria), new { id = categoriaResponse.Id }, categoriaResponse);
     }
     
     [HttpGet]
-    public async Task<ActionResult<List<Categoria>>> GetAll()
+    public async Task<ActionResult<List<CategoriaResponse>>> GetAll()
     {
         var categorias = await _categoriaService.GetAllCategoria();
-        if (categorias == null || categorias.Count == 0)
-            return NotFound("Nenhuma categoria encontrada.");
-
-        return Ok(categorias);
+        return Ok(categorias); 
     }
     
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
-        bool deleted = await _categoriaService.DeleteCategoriaAsync(id);
-        if (!deleted)
-            return NotFound("Categoria não encontrada.");
-
+        await _categoriaService.DeleteCategoriaAsync(id); 
         return NoContent();
     }
     
     [HttpPatch("{id}")]
     public async Task<ActionResult> Update(int id, [FromBody] AtualizarCategoriaRequest request)
     {
-        try
-        {
-            var categoriaAtualizada = await _categoriaService.UpdateCategoriaAsync(id, request);
-            return Ok(categoriaAtualizada);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        var categoriaAtualizada = await _categoriaService.UpdateCategoriaAsync(id, request);
+        return Ok(categoriaAtualizada);
     }
     
     

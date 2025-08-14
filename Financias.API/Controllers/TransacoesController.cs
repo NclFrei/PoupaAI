@@ -18,18 +18,13 @@ public class TransacoesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<ActionResult<TransacaoResponse>> GetById(int id)
     {
         var transacao = await _transacaoService.GetTransacaoIdAsync(id);
-        if (transacao == null)
-        {
-            return NotFound();
-        }
-
         return Ok(transacao);
-
-
     }
+    
+    
 
     [HttpPost]
     public async Task<ActionResult<TransacaoResponse>> Create([FromBody] TransacaoRequest transacaoRequest)
@@ -41,11 +36,8 @@ public class TransacoesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
-        bool deleted = await _transacaoService.DeleteTransacaoAsync(id);
-        if (!deleted)
-            return NotFound("Transação não encontrada.");
-
-        return NoContent();
+        await _transacaoService.DeleteTransacaoAsync(id); 
+        return NoContent(); 
     }
     
     [HttpPatch("{id}")]
@@ -62,13 +54,13 @@ public class TransacoesController : ControllerBase
         }
     }
     
-    [HttpGet("{idUsuario}")]
+    [HttpGet("usuario/{idUsuario}")]
     public async Task<ActionResult<List<Transacao>>> GetTransacaoUsuario(int idUsuario)
     {
-        var transacao = await _transacaoService.GetTransacaoPorUsuario(idUsuario);
-        if (transacao == null || transacao.Count == 0)
-            return NotFound("Nenhuma transacao encontrada.");
-
-        return Ok(transacao);
+        var transacoes = await _transacaoService.GetTransacaoPorUsuario(idUsuario);
+        return Ok(transacoes); 
     }
+    
+  
+    
 }

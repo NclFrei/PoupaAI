@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Financias.API.Domain.DTOs.Request;
+using Financias.API.Domain.Validator;
+using Financias.API.Middleware;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +41,8 @@ builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ITransacaoRepository, TransacaoRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-
+builder.Services.AddScoped<IValidator<CategoriaRequest>, CategoriaCreateRequestValidator>();
+builder.Services.AddScoped<IValidator<TransacaoRequest>, TransacaoCreateRequestValidator>();
 builder.Services.AddHostedService<RabbitMqSubscriber>();
 builder.Services.AddSingleton<IProcessaEvento, ProcessaEvento>();
 
@@ -93,6 +98,7 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {

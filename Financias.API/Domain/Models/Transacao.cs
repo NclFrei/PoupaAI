@@ -11,6 +11,7 @@ public class Transacao
     public decimal Valor { get; set; }
     public int CategoriaId { get; set; }
     public TipoTransacao Tipo { get; set; }
+    
     public Categoria Categoria { get; set; }
     public int UsuarioId { get; set; }
     
