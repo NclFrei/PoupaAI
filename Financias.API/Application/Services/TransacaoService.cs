@@ -70,9 +70,13 @@ public class TransacaoService
         var transacaoCriada = await _transacaoRepository.CreateTransacaoAsync(transacao);
         await _usuarioRepository.AtualizarAsync(usuario);
         
-        var transacaoEvent = _mapper.Map<TransacaoResponseRabbitMq>(transacaoCriada);
+        transacaoCriada = await _transacaoRepository.GetTransacaoComDetalhesAsync(transacao.Id);
         
+        var transacaoEvent = _mapper.Map<TransacaoResponseRabbitMq>(transacaoCriada);
         _rabbitMqClient.PublicaTransacaoCriada(transacaoEvent);
+        
+        Console.WriteLine($"Transação enviada: Id={transacaoEvent.Id}, Nome={transacaoEvent.Nome}, Valor={transacaoEvent.Valor}, UsuarioId={transacaoEvent.UsuarioId}, UsuarioNome={transacaoEvent.UsuarioNome}");
+
         
         return _mapper.Map<TransacaoResponse>(transacaoCriada);
     }

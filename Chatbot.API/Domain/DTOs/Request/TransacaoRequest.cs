@@ -1,8 +1,8 @@
-namespace Financias.API.Domain.DTOs.Response;
+namespace Chatbot.API.Domain.DTOs.Request;
 
-public class TransacaoResponseRabbitMq
+public class TransacaoRequest
 {
-    public int Id { get; set; }
+    public int IdExterno { get; set; }
     public string Nome { get; set; }
     public string Descricao { get; set; }
     public DateTime DataTransacao { get; set; }

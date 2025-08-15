@@ -8,6 +8,7 @@ public interface ITransacaoRepository
     Task<Transacao> CreateTransacaoAsync(Transacao transacao);
     Task<Transacao> UpdateCategoriaAsync(Transacao transacao);
     Task<bool> DeleteTransacaoAsync(Transacao transacao);
+    Task<Transacao> GetTransacaoComDetalhesAsync(int id);
 
     Task<List<Transacao>> GetTransacaoPorUsuarioAsync(int idUsuario);
 }

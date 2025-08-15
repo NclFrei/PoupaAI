@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Financias", "Financias", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Financias.API", "Financias.API\Financias.API.csproj", "{C8267010-8244-4F07-89F0-809352C907AE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chatbot", "Chatbot", "{421448E6-FC80-4F29-A5FA-C43DB42E015E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatbot.API", "Chatbot.API\Chatbot.API.csproj", "{93E64CBA-39C4-437D-BB1E-40EE34278219}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,10 @@ Global
 		{C8267010-8244-4F07-89F0-809352C907AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8267010-8244-4F07-89F0-809352C907AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8267010-8244-4F07-89F0-809352C907AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93E64CBA-39C4-437D-BB1E-40EE34278219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93E64CBA-39C4-437D-BB1E-40EE34278219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93E64CBA-39C4-437D-BB1E-40EE34278219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93E64CBA-39C4-437D-BB1E-40EE34278219}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +40,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D79274E8-2DAC-45D5-894C-DE830215AADB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{C8267010-8244-4F07-89F0-809352C907AE} = {1E3AE8AB-47C5-4CF2-A3ED-8C99551591B6}
+		{93E64CBA-39C4-437D-BB1E-40EE34278219} = {421448E6-FC80-4F29-A5FA-C43DB42E015E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {971615EC-CA0B-4BE6-87E5-1AFDDEF2D4BC}

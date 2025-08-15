@@ -48,5 +48,13 @@ public class TransacaoRepository : ITransacaoRepository
         return transacao;
     }
     
+    public async Task<Transacao> GetTransacaoComDetalhesAsync(int id)
+    {
+        return await _context.Transacoes
+            .Include(t => t.Categoria)
+            .Include(t => t.Usuario)
+            .FirstOrDefaultAsync(t => t.Id == id);
+    }
+    
  
 }
