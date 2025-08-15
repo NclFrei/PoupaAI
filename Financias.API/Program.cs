@@ -44,6 +44,7 @@ builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IValidator<CategoriaRequest>, CategoriaCreateRequestValidator>();
 builder.Services.AddScoped<IValidator<TransacaoRequest>, TransacaoCreateRequestValidator>();
 builder.Services.AddHostedService<RabbitMqSubscriber>();
+builder.Services.AddSingleton<IRabbitMqClient, RabbitMqClient>();
 builder.Services.AddSingleton<IProcessaEvento, ProcessaEvento>();
 
 // Configura��es do JWT

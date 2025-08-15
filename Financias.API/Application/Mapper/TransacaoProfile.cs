@@ -18,5 +18,9 @@ public class TransacaoProfile : Profile
                     srcMember != null &&
                     !(srcMember is string str && string.IsNullOrWhiteSpace(str))
                 ));
+        
+        CreateMap<Transacao, TransacaoResponseRabbitMq>()
+            .ForMember(dest => dest.Categoria, opt => opt.MapFrom(src => src.Categoria.Nome))
+            .ForMember(dest => dest.Tipo, opt => opt.MapFrom(src => src.Tipo.ToString()));
     }
 }

@@ -5,6 +5,7 @@ using Financias.API.Domain.DTOs.Response;
 using Financias.API.Domain.Enums;
 using Financias.API.Domain.Interfaces;
 using Financias.API.Domain.Models;
+using Financias.API.Infrastructure.RabbitMqClient;
 using Financias.API.Infrastructure.Repository;
 using FluentValidation;
 
@@ -17,14 +18,16 @@ public class TransacaoService
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly CategoriaService _categoriaService;
     private readonly IValidator<TransacaoRequest> _validator;
+    private IRabbitMqClient _rabbitMqClient;
 
-    public TransacaoService(IMapper mapper, ITransacaoRepository transacaoRepository, IUsuarioRepository usuarioRepository, CategoriaService categoriaService, IValidator<TransacaoRequest> validator)
+    public TransacaoService(IMapper mapper, ITransacaoRepository transacaoRepository, IUsuarioRepository usuarioRepository, CategoriaService categoriaService, IValidator<TransacaoRequest> validator, IRabbitMqClient rabbitMqClient)
     {
         _mapper = mapper;
         _transacaoRepository = transacaoRepository;
         _usuarioRepository = usuarioRepository;
         _categoriaService = categoriaService;
         _validator = validator;
+        _rabbitMqClient = rabbitMqClient;
     }
 
     public async Task<TransacaoResponse> CriarTransacaoAsync(TransacaoRequest transacaoRequest)
@@ -66,7 +69,11 @@ public class TransacaoService
 
         var transacaoCriada = await _transacaoRepository.CreateTransacaoAsync(transacao);
         await _usuarioRepository.AtualizarAsync(usuario);
-
+        
+        var transacaoEvent = _mapper.Map<TransacaoResponseRabbitMq>(transacaoCriada);
+        
+        _rabbitMqClient.PublicaTransacaoCriada(transacaoEvent);
+        
         return _mapper.Map<TransacaoResponse>(transacaoCriada);
     }
 

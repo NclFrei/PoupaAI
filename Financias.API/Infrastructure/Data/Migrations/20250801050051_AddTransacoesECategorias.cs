@@ -36,8 +36,8 @@ namespace Financias.Infrastructure.Migrations
                     Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DataTransacao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CategoriaId = table.Column<int>(type: "int", nullable: false),
                     Tipo = table.Column<int>(type: "int", nullable: false),
+                    CategoriaId = table.Column<int>(type: "int", nullable: false),
                     UsuarioId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
