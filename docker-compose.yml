@@ -1,0 +1,94 @@
+version: '3.8'
+services:
+
+  sql_financias:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql_financias
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your_password123"
+    ports:
+      - "1433:1433"
+    networks:
+      - poupaAI
+
+  sql_usuarios:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql_usuarios
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your_password123"
+    ports:
+      - "1434:1433"
+    networks:
+      - poupaAI
+
+  sql_chatbot:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql_chatbot
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your_password123"
+    ports:
+      - "1435:1433"
+    networks:
+      - poupaAI
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - poupaAI
+
+  usuarios_api:
+    build: ./Usuarios.API
+    container_name: usuarios_api
+    environment:
+      ConnectionStrings__MySqlConnection: "Server=sql_usuarios,1433;Database=UsuariosDB;User Id=sa;Password=Your_password123;TrustServerCertificate=True;"
+      RabbitMqHost: "rabbitmq"
+      RabbitMqPort: "5672"
+      # JWT SecretKey deve ser definido por quem roda os containers
+    ports:
+      - "5001:8080"
+    depends_on:
+      - sql_usuarios
+      - rabbitmq
+    networks:
+      - poupaAI
+
+  financias_api:
+    build: ./Financias.API
+    container_name: financias_api
+    environment:
+      ConnectionStrings__MySqlConnection: "Server=sql_financias,1433;Database=FinanciasDB;User Id=sa;Password=Your_password123;TrustServerCertificate=True;"
+      RabbitMqHost: "rabbitmq"
+      RabbitMqPort: "5672"
+    ports:
+      - "5002:8080"
+    depends_on:
+      - sql_financias
+      - rabbitmq
+    networks:
+      - poupaAI
+
+  chatbot_api:
+    build: ./Chatbot.API
+    container_name: chatbot_api
+    environment:
+      ConnectionStrings__MySqlConnection: "Server=sql_chatbot,1433;Database=ChatbotDB;User Id=sa;Password=Your_password123;TrustServerCertificate=True;"
+      RabbitMqHost: "rabbitmq"
+      RabbitMqPort: "5672"
+    ports:
+      - "5003:8080"
+    depends_on:
+      - sql_chatbot
+      - rabbitmq
+    networks:
+      - poupaAI
+
+networks:
+  poupaAI:
+    driver: bridge

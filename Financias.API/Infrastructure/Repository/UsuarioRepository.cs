@@ -36,4 +36,11 @@ public class UsuarioRepository : IUsuarioRepository
     {
         return await _context.Usuarios.FindAsync(idExternoUsuario);
     }
+
+    public bool ExisteUsuarioExterno(int idExternoUsuario)
+    {
+        return _context.Usuarios.Any(usuario => usuario.IdExterno == idExternoUsuario);
+    }
+
+    
 }
