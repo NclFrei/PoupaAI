@@ -1,6 +1,7 @@
 using Chatbot.API.Domain.Interfaces;
 using Chatbot.API.Domain.Models;
 using Chatbot.API.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chatbot.API.Infrastructure.Repository;
 
@@ -19,9 +20,18 @@ public class TransacaoRepository : ITransacaoRepository
         _context.SaveChanges();
         return transacao;
     }
-    
-    public bool ExisteTransacaoExterna(int idExternoUsuario)
+
+    public async Task<List<Transacao>> ObterTransacoesRecentesPorUsuarioAsync(int usuarioId, int limite)
     {
-        return _context.Transacoes.Any(usuario => usuario.IdExterno == idExternoUsuario);
+        return await _context.Transacoes
+            .Where(t => t.UsuarioId == usuarioId)
+            .OrderBy(t => t.DataTransacao)
+            .ToListAsync();
+
+    }
+
+    public bool ExisteTransacaoExterna(int idExternoTransacao)
+    {
+        return _context.Transacoes.Any(transacao => transacao.IdExterno == idExternoTransacao);
     }
 }

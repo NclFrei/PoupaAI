@@ -1,5 +1,6 @@
 using System.Text;
 using Chatbot.API.Application.Mapper;
+using Chatbot.API.Application.Service;
 using Chatbot.API.Domain.Interfaces;
 using Chatbot.API.Infrastructure.Configuration;
 using Chatbot.API.Infrastructure.Data;
@@ -30,15 +31,18 @@ builder.Services.AddAutoMapper(cfg =>
 builder.Services.AddScoped<ITransacaoRepository, TransacaoRepository>();
 builder.Services.AddHostedService<RabbitMqSubscriber>();
 builder.Services.AddSingleton<IProcessaEvento, ProcessaEvento>();
+builder.Services.AddScoped<ChatbotService>();
+builder.Services.AddScoped<GeminiAssistantService>();
+
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWTSettings"));
 var jwtSettings = builder.Configuration.GetSection("JWTSettings").Get<JwtSettings>();
 
 builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
     .AddJwtBearer(options =>
     {
         options.RequireHttpsMetadata = true;
@@ -55,7 +59,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { Title = "Financias.API", Version = "v1" });
+    c.SwaggerDoc("v1", new() { Title = "Chatbot.API", Version = "v1" });
 
     var jwtSecurityScheme = new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
@@ -90,11 +94,10 @@ using (var scope = app.Services.CreateScope())
 }
 
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 

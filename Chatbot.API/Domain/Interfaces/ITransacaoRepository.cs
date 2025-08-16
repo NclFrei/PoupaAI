@@ -6,4 +6,5 @@ public interface ITransacaoRepository
 {
     bool ExisteTransacaoExterna(int idExternoTransacao);
     Task<Transacao> CreateTransacao(Transacao transacao);
+    Task<List<Transacao>> ObterTransacoesRecentesPorUsuarioAsync(int usuarioId, int limite);
 }
