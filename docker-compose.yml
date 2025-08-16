@@ -50,7 +50,6 @@ services:
       ConnectionStrings__MySqlConnection: "Server=sql_usuarios,1433;Database=UsuariosDB;User Id=sa;Password=Your_password123;TrustServerCertificate=True;"
       RabbitMqHost: "rabbitmq"
       RabbitMqPort: "5672"
-      # JWT SecretKey deve ser definido por quem roda os containers
     ports:
       - "5001:8080"
     depends_on:
@@ -92,3 +91,4 @@ services:
 networks:
   poupaAI:
     driver: bridge
+
