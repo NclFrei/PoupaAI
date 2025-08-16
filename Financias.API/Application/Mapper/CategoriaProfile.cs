@@ -19,6 +19,8 @@ public class CategoriaProfile : Profile
                     srcMember != null &&
                     !(srcMember is string str && string.IsNullOrWhiteSpace(str))
                 ));
+
+        CreateMap<CategoriaResponse, Categoria>();
     }
     
 }

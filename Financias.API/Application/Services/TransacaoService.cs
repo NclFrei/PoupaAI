@@ -52,20 +52,24 @@ public class TransacaoService
             throw new KeyNotFoundException("Categoria não encontrada.");
         }
 
-        transacao.CategoriaId = categoria.Id;  
+        var categoriaEntity = _mapper.Map<Categoria>(categoria);
+        transacao.CategoriaId = categoriaEntity.Id;
+        transacao.Categoria = categoriaEntity;
 
-        var usuario = await _usuarioRepository.BuscarPorIdAsync(transacaoRequest.UsuarioId);
+        var usuario = await _usuarioRepository.BuscaUsuarioExterno(transacaoRequest.UsuarioId);
         if (usuario == null)
         {
             throw new KeyNotFoundException("Usuário não encontrado.");
         }
+
+        transacao.UsuarioId = usuario.Id;
+        transacao.Usuario = usuario;
 
         if (transacao.Tipo == TipoTransacao.ENTRADA)
             usuario.Saldo += transacao.Valor;
         else if (transacao.Tipo == TipoTransacao.DESPESA)
             usuario.Saldo -= transacao.Valor;
 
-        transacao.UsuarioId = usuario.Id;
 
         var transacaoCriada = await _transacaoRepository.CreateTransacaoAsync(transacao);
         await _usuarioRepository.AtualizarAsync(usuario);
@@ -73,9 +77,9 @@ public class TransacaoService
         transacaoCriada = await _transacaoRepository.GetTransacaoComDetalhesAsync(transacao.Id);
         
         var transacaoEvent = _mapper.Map<TransacaoResponseRabbitMq>(transacaoCriada);
+
+
         _rabbitMqClient.PublicaTransacaoCriada(transacaoEvent);
-        
-        Console.WriteLine($"Transação enviada: Id={transacaoEvent.Id}, Nome={transacaoEvent.Nome}, Valor={transacaoEvent.Valor}, UsuarioId={transacaoEvent.UsuarioId}, UsuarioNome={transacaoEvent.UsuarioNome}");
 
         
         return _mapper.Map<TransacaoResponse>(transacaoCriada);

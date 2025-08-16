@@ -2,7 +2,7 @@ namespace Chatbot.API.Domain.DTOs.Request;
 
 public class TransacaoRequest
 {
-    public int IdExterno { get; set; }
+    public int Id { get; set; }
     public string Nome { get; set; }
     public string Descricao { get; set; }
     public DateTime DataTransacao { get; set; }
