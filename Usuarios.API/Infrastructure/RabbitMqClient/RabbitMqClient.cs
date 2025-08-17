@@ -22,14 +22,7 @@ public class RabbitMqClient : IRabbitMqClient
         _channel = _connection.CreateModel();
         _channel.ExchangeDeclare(exchange: "trigger", type: ExchangeType.Fanout);
     }
-
-    public void PublicaUsuarioCriado(UsuarioResponseEvent usuarioCriado)
-    {
-        var message = JsonSerializer.Serialize(usuarioCriado);
-        var body = Encoding.UTF8.GetBytes(message);
-
-        _channel.BasicPublish(exchange: "trigger", routingKey: "", basicProperties: null, body: body);
-    }
+    
     
     public void PublicaUsuario(UsuarioResponseEvent usuarioAtualizado)
     {
