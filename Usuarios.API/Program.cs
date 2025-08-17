@@ -19,7 +19,7 @@ using Usuarios.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurações do JWT
+// Configuraï¿½ï¿½es do JWT
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWTSettings"));
 var jwtSettings = builder.Configuration.GetSection("JWTSettings").Get<JwtSettings>();
 
@@ -56,7 +56,7 @@ builder.Services.AddAuthentication(options =>
     {
         OnAuthenticationFailed = context =>
         {
-            Console.WriteLine($"Autenticação falhou: {context.Exception.Message}");
+            Console.WriteLine($"Autenticaï¿½ï¿½o falhou: {context.Exception.Message}");
             return Task.CompletedTask;
         },
         OnTokenValidated = context =>
@@ -95,7 +95,19 @@ builder.Services.AddSwaggerGen(c =>
 
 
 builder.Services.AddDbContext<UsuariosContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MySqlConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("MySqlConnection"),
+        sqlOptions =>
+        {
+            // tenta 5 vezes, esperando 10s entre tentativas
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(10),
+                errorNumbersToAdd: null
+            );
+        }
+    )
+);
 
 builder.Services.AddAutoMapper(cfg =>
 {

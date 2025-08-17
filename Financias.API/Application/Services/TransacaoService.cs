@@ -51,10 +51,8 @@ public class TransacaoService
         {
             throw new KeyNotFoundException("Categoria não encontrada.");
         }
-
-        var categoriaEntity = _mapper.Map<Categoria>(categoria);
-        transacao.CategoriaId = categoriaEntity.Id;
-        transacao.Categoria = categoriaEntity;
+        
+        transacao.CategoriaId = transacaoRequest.CategoriaId;
 
         var usuario = await _usuarioRepository.BuscaUsuarioExterno(transacaoRequest.UsuarioId);
         if (usuario == null)
@@ -63,7 +61,6 @@ public class TransacaoService
         }
 
         transacao.UsuarioId = usuario.Id;
-        transacao.Usuario = usuario;
 
         if (transacao.Tipo == TipoTransacao.ENTRADA)
             usuario.Saldo += transacao.Valor;
@@ -85,16 +82,14 @@ public class TransacaoService
         return _mapper.Map<TransacaoResponse>(transacaoCriada);
     }
 
-    public async Task<TransacaoResponse?> GetTransacaoIdAsync(int id)
+    public async Task<TransacaoGetResponse?> GetTransacaoIdAsync(int id)
     {
         var transacao = await _transacaoRepository.GetTransacaoPorIdAsync(id);
         if (transacao == null)
             throw new KeyNotFoundException("Transação não encontrada.");
         
-        return _mapper.Map<TransacaoResponse>(transacao);
+        return _mapper.Map<TransacaoGetResponse>(transacao);
     }
-    
-    
     
     public async Task DeleteTransacaoAsync(int id)
     {
@@ -126,10 +121,15 @@ public class TransacaoService
         return transacao;
     }
     
-    public async Task<List<Transacao>> GetTransacaoPorUsuario(int usuarioId)
+    public async Task<List<TransacaoGetResponse>> GetTransacaoPorUsuario(int usuarioId)
     {
         var transacoes = await _transacaoRepository.GetTransacaoPorUsuarioAsync(usuarioId);
-        return transacoes ?? new List<Transacao>(); // Garante lista vazia se for null
+
+        // garante que não seja null
+        transacoes ??= new List<Transacao>();
+
+        // mapeia para lista de DTOs
+        return _mapper.Map<List<TransacaoGetResponse>>(transacoes);
     }
     
     

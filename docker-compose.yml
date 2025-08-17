@@ -57,6 +57,14 @@ services:
       - rabbitmq
     networks:
       - poupaAI
+    command: >
+      /bin/sh -c "
+      until nc -z sql_usuarios 1433; do
+        echo 'Waiting for sql_usuarios...';
+        sleep 5;
+      done;
+      dotnet Usuarios.API.dll
+      "
 
   financias_api:
     build: ./Financias.API
@@ -72,6 +80,14 @@ services:
       - rabbitmq
     networks:
       - poupaAI
+    command: >
+      /bin/sh -c "
+      until nc -z sql_financias 1433; do
+        echo 'Waiting for sql_financias...';
+        sleep 5;
+      done;
+      dotnet Financias.API.dll
+      "
 
   chatbot_api:
     build: ./Chatbot.API
@@ -87,8 +103,15 @@ services:
       - rabbitmq
     networks:
       - poupaAI
+    command: >
+      /bin/sh -c "
+      until nc -z sql_chatbot 1433; do
+        echo 'Waiting for sql_chatbot...';
+        sleep 5;
+      done;
+      dotnet Chatbot.API.dll
+      "
 
 networks:
   poupaAI:
     driver: bridge
-

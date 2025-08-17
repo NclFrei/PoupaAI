@@ -24,7 +24,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<FinanciasContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MySqlConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("MySqlConnection"),
+        sqlOptions =>
+        {
+            // tenta 5 vezes, esperando 10s entre tentativas
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(10),
+                errorNumbersToAdd: null
+            );
+        }
+    )
+);
+
 
 builder.Services.AddAutoMapper(cfg =>
 {

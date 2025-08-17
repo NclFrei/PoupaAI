@@ -16,7 +16,10 @@ public class TransacaoRepository : ITransacaoRepository
  
     public async Task<Transacao?> GetTransacaoPorIdAsync(int id)
     {
-        return await _context.Transacoes.FindAsync(id);
+        return await _context.Transacoes
+            .Include(t => t.Categoria)
+            .Include(t => t.Usuario)
+            .FirstOrDefaultAsync(t => t.Id == id);
     }
  
     public async Task<Transacao> CreateTransacaoAsync(Transacao transacao)
@@ -30,6 +33,8 @@ public class TransacaoRepository : ITransacaoRepository
     {
         return await _context.Transacoes
             .Where(t => t.UsuarioId == idUsuario)
+            .Include(t => t.Categoria)
+            .Include(t => t.Usuario)
             .ToListAsync();
     }
     

@@ -2,5 +2,5 @@
 
 public interface IProcessaEvento
 {
-    void Processa(string mensagem);
+    Task Processa(string mensagem);
 }

@@ -59,11 +59,11 @@ public class AuthService
 
         if (!result.IsValid)
         {
-           var errors = result.Errors
+            var errors = result.Errors
                 .Select(e => $"{e.PropertyName}: {e.ErrorMessage} ")
-                    .ToList();
+                .ToList();
 
-                throw new ValidationException(string.Join(Environment.NewLine, errors));
+            throw new ValidationException(string.Join(Environment.NewLine, errors));
         }
 
         if (await _usuarioRepository.VerificaEmailExisteAsync(userRequest.Email))
@@ -73,10 +73,8 @@ public class AuthService
         usuario.SetPassword(userRequest.Senha);
         var usuarioCriado = await _usuarioRepository.CriarAsync(usuario);
 
-
         var usuarioResponseEvent = _mapper.Map<UsuarioResponseEvent>(usuarioCriado);
-
-        _rabbitMqClient.PublicaUsuarioCriado(usuarioResponseEvent);
+        _rabbitMqClient.PublicaUsuario(usuarioResponseEvent);
 
         return _mapper.Map<UsuarioResponse>(usuarioCriado);
     }

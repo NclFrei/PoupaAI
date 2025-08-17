@@ -30,4 +30,13 @@ public class RabbitMqClient : IRabbitMqClient
 
         _channel.BasicPublish(exchange: "trigger", routingKey: "", basicProperties: null, body: body);
     }
+    
+    public void PublicaUsuario(UsuarioResponseEvent usuarioAtualizado)
+    {
+        var message = JsonSerializer.Serialize(usuarioAtualizado);
+        var body = Encoding.UTF8.GetBytes(message);
+
+        _channel.BasicPublish(exchange: "trigger", routingKey: "", basicProperties: null, body: body);
+    }
+    
 }

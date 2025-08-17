@@ -23,5 +23,7 @@ public class TransacaoProfile : Profile
             .ForMember(dest => dest.Categoria, opt => opt.MapFrom(src => src.Categoria.Nome))
             .ForMember(dest => dest.Tipo, opt => opt.MapFrom(src => src.Tipo.ToString()))
             .ForMember(dest => dest.UsuarioNome, opt => opt.MapFrom(src => src.Usuario.Nome));
+
+        CreateMap<Transacao, TransacaoGetResponse>();
     }
 }

@@ -21,7 +21,8 @@ public class UsuarioProfile : Profile
         // Retorno de usuário
         CreateMap<Usuario, UsuarioResponse>();
 
-        CreateMap<Usuario, UsuarioResponseEvent>();
+        CreateMap<Usuario, UsuarioResponseEvent>()
+            .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
 
         // Atualização parcial (PATCH)
         CreateMap<AtualizarUsuarioRequest, Usuario>()

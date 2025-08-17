@@ -5,5 +5,5 @@ namespace Usuarios.API.Infrastructure.RabbitMqClient;
 
 public interface IRabbitMqClient
 {
-    void PublicaUsuarioCriado(UsuarioResponseEvent usuarioCriado);
+    void PublicaUsuario(UsuarioResponseEvent usuarioCriado);
 }
