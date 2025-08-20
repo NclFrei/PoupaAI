@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Usuarios.API.Application.Services;
 using Usuarios.API.Domain.DTOs.Request;
 using Usuarios.API.Domain.DTOs.Response;
+using Usuarios.API.Erros;
 
 
 namespace Usuarios.API.Controllers
@@ -19,6 +20,9 @@ namespace Usuarios.API.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiException), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiException), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var response = await _authService.LoginAsync(request);
@@ -26,6 +30,9 @@ namespace Usuarios.API.Controllers
         }
 
         [HttpPost("cadastro")]
+        [ProducesResponseType(typeof(UsuarioResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiException), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiException), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<UsuarioResponse>> CriarUsuario([FromBody] UsuarioCreateRequest request)
         {
             var usuarioResponse = await _authService.CreateUserAsync(request);

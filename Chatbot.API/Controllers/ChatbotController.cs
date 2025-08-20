@@ -17,6 +17,11 @@ namespace Chatbot.API.Controllers
         }
 
         [HttpPost("Perguntar")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AnalyzeTransactions([FromBody] PerguntaRequest request)
         {
             if (request == null || request.UsuarioId <= 0 || string.IsNullOrEmpty(request.Pergunta))
