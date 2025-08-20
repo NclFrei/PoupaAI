@@ -1,5 +1,6 @@
 ﻿using Chatbot.API.Application.Service;
 using Chatbot.API.Domain.DTOs.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace Chatbot.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ChatbotController : ControllerBase
     {
         private readonly ChatbotService _chatbotService;

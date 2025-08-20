@@ -3,12 +3,14 @@ using Financias.API.Domain.DTOs.Request;
 using Financias.API.Domain.DTOs.Response;
 using Financias.API.Domain.Models;
 using Financias.API.Erros;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Financias.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class CategoriaController : ControllerBase
 {
     private readonly CategoriaService _categoriaService;
