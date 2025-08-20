@@ -9,5 +9,5 @@ public class AtualizaTransacaoRequest
     public DateTime? DataTransacao { get; set; }
     public decimal? Valor { get; set; }
     public int? CategoriaId { get; set; }
-    public TipoTransacao Tipo { get; set; }
+    public TipoTransacao? Tipo { get; set; }
 }

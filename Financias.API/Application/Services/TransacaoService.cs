@@ -76,7 +76,7 @@ public class TransacaoService
         var transacaoEvent = _mapper.Map<TransacaoResponseRabbitMq>(transacaoCriada);
 
 
-        _rabbitMqClient.PublicaTransacaoCriada(transacaoEvent);
+        _rabbitMqClient.PublicaTransacao(transacaoEvent);
 
         
         return _mapper.Map<TransacaoResponse>(transacaoCriada);
@@ -100,7 +100,7 @@ public class TransacaoService
         await _transacaoRepository.DeleteTransacaoAsync(transacao); 
     }
 
-    public async Task<Transacao> UpdateCategoriaAsync(int id, AtualizaTransacaoRequest transacaoRequest)
+    public async Task<TransacaoResponse> UpdateTransacaoAsync(int id, AtualizaTransacaoRequest transacaoRequest)
     {
         var transacao = await _transacaoRepository.GetTransacaoPorIdAsync(id);
         if (transacao == null)
@@ -108,17 +108,22 @@ public class TransacaoService
         
         if (transacaoRequest.CategoriaId.HasValue)
         {
-            var categoriaTransacao = await _categoriaService.GetCategoriaByIdAsync(transacaoRequest.CategoriaId.Value);
-            if (categoriaTransacao == null)
+            var categoria = await _categoriaService.GetCategoriaByIdAsync(transacaoRequest.CategoriaId.Value);
+            if (categoria == null)
                 throw new KeyNotFoundException("Categoria para atualizar não encontrada.");
-            
+
             transacao.CategoriaId = transacaoRequest.CategoriaId.Value;
         }
         
         _mapper.Map(transacaoRequest, transacao);
-
+        
+        
+        var transacaoEvent = _mapper.Map<TransacaoResponseRabbitMq>(transacao);
+        _rabbitMqClient.PublicaTransacao(transacaoEvent);
+        
         await _transacaoRepository.UpdateCategoriaAsync(transacao);
-        return transacao;
+
+        return _mapper.Map<TransacaoResponse>(transacao);
     }
     
     public async Task<List<TransacaoGetResponse>> GetTransacaoPorUsuario(int usuarioId)

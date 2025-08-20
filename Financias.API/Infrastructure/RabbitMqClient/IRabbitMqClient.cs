@@ -4,5 +4,5 @@ namespace Financias.API.Infrastructure.RabbitMqClient;
 
 public interface IRabbitMqClient
 {
-    void PublicaTransacaoCriada(TransacaoResponseRabbitMq transacaoCriada);
+    void PublicaTransacao(TransacaoResponseRabbitMq transacaoCriada);
 }

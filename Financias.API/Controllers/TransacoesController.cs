@@ -45,7 +45,7 @@ public class TransacoesController : ControllerBase
     {
         try
         {
-            var transacaoAtualizada = await _transacaoService.UpdateCategoriaAsync(id, request);
+            var transacaoAtualizada = await _transacaoService.UpdateTransacaoAsync(id, request);
             return Ok(transacaoAtualizada);
         }
         catch (InvalidOperationException ex)

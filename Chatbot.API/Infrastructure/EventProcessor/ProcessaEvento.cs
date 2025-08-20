@@ -17,19 +17,26 @@ public class ProcessaEvento : IProcessaEvento
         _mapper = mapper;
     }
 
-    public void Processa(string mensagem)
+    public async Task Processa(string mensagem)
     {
         using var scope = _scopeFactory.CreateScope();
 
         var transacaoRepository = scope.ServiceProvider.GetRequiredService<ITransacaoRepository>();
 
         var transacaoReadDto = JsonSerializer.Deserialize<TransacaoRequest>(mensagem);
+        if (transacaoReadDto == null) return;
+        
+        var transacaoExiste = await transacaoRepository.BuscaTransacaoExterno(transacaoReadDto.Id);
 
-        var transacao = _mapper.Map<Transacao>(transacaoReadDto);
-
-        if (!transacaoRepository.ExisteTransacaoExterna(transacao.IdExterno))
+        if (transacaoExiste == null)
         {
-            transacaoRepository.CreateTransacao(transacao);
+            var usuario = _mapper.Map<Transacao>(transacaoReadDto);
+            await transacaoRepository.CreateTransacao(usuario);
+        }
+        else
+        {
+            _mapper.Map(transacaoReadDto, transacaoExiste);
+            await transacaoRepository.AtualizaTransacaoAsync(transacaoExiste);
         }
     }
 }

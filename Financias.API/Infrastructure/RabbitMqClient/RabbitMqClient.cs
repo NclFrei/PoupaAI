@@ -29,7 +29,7 @@ public class RabbitMqClient : IRabbitMqClient
         _channel.ExchangeDeclare(exchange: "TransacaoExchange", type: ExchangeType.Fanout);
     }
 
-    public void PublicaTransacaoCriada(TransacaoResponseRabbitMq transacaoCriada)
+    public void PublicaTransacao(TransacaoResponseRabbitMq transacaoCriada)
     {
         var message = JsonSerializer.Serialize(transacaoCriada);
         var body = Encoding.UTF8.GetBytes(message);
